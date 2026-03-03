@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>歐洲旅遊管家 2026</title>
+    <title>OUR HONEYMOON TRIP 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -12,163 +12,158 @@
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
         :root { --british-brown: #5D5344; --british-bg: #F4F1EA; }
         body { font-family: 'Noto Sans TC', sans-serif; background-color: var(--british-bg); color: #4A4238; -webkit-tap-highlight-color: transparent; }
-        
-        /* 底部導航 */
-        .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #E2DDD5; z-index: 100; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
-        .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #A8A297; font-size: 10px; font-weight: bold; }
-        .tab-item.active { color: var(--british-brown); }
-
-        .main-content { min-height: 100vh; padding-bottom: 100px; }
         .banner-container { height: 160px; width: 100%; position: relative; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1486299267070-83823f5448dd?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; }
-        
-        /* 行程樣式 */
-        .date-scroller { display: flex; overflow-x: auto; padding: 15px; gap: 10px; scrollbar-width: none; }
-        .date-item { min-width: 55px; display: flex; flex-direction: column; align-items: center; padding: 10px 5px; border-radius: 15px; background: white; border: 1px solid #EFEBE5; }
-        .date-item.active { background-color: var(--british-brown); color: white; }
-        
-        .fab { position: fixed; bottom: 90px; right: 20px; width: 56px; height: 56px; background-color: var(--british-brown); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 90; }
-        
+        .main-content { background-color: #FFFFFF; border-radius: 35px 35px 0 0; margin-top: -40px; position: relative; z-index: 10; min-height: 85vh; padding-bottom: 120px; }
+        .date-scroller { display: flex; overflow-x: auto; padding: 20px; gap: 12px; scrollbar-width: none; }
+        .date-item { min-width: 60px; display: flex; flex-direction: column; align-items: center; padding: 12px 5px; border-radius: 18px; border: 1px solid #EFEBE5; background: white; }
+        .date-item.active { background-color: var(--british-brown); color: white; transform: scale(1.05); }
+        .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #E2DDD5; z-index: 100; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+        .tab-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #A8A297; font-size: 10px; font-weight: bold; width: 25%; }
+        .tab-item.active { color: var(--british-brown); }
+        .fab { position: fixed; bottom: 100px; right: 25px; width: 60px; height: 60px; background-color: var(--british-brown); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2); z-index: 50; }
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: flex; align-items: flex-end; }
-        .modal-content { background: white; width: 100%; border-radius: 25px 25px 0 0; padding: 20px; max-height: 85vh; overflow-y: auto; padding-bottom: 40px; }
-        
+        .modal-content { background: white; width: 100%; border-radius: 30px 30px 0 0; padding: 24px; max-height: 85vh; overflow-y: auto; }
         input, select, textarea { width: 100%; padding: 12px; background: #F8F6F2; border-radius: 12px; border: 1px solid #E2DDD5; margin-top: 5px; font-size: 16px; }
-        
-        /* 購物清單卡片 */
-        .shop-card { background: white; border-radius: 15px; overflow: hidden; border: 1px solid #EFEBE5; }
-        .shop-img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #eee; }
+        .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+        .color-dot.active { border-color: #000; transform: scale(1.1); }
+        .shop-card { background: white; border-radius: 15px; overflow: hidden; border: 1px solid #EFEBE5; position: relative; }
+        .shop-img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f0f0f0; }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <div class="main-content">
-        <header v-if="currentTab === 'itinerary'" class="banner-container flex items-center justify-center">
-            <h1 class="text-white text-2xl font-serif font-bold tracking-widest">MY TRIP 2026</h1>
-        </header>
+    <header class="banner-container">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <h1 class="text-white text-3xl font-serif font-bold tracking-widest text-center px-4">OUR HONEYMOON TRIP 2026</h1>
+        </div>
+    </header>
 
-        <section v-if="currentTab === 'itinerary'">
+    <main class="main-content">
+        <section v-if="currentTab === 'itinerary'" class="pt-2">
             <div class="date-scroller">
                 <div v-for="(day, index) in daysData" :key="index" @click="selectedDayIndex = index" class="date-item" :class="{active: selectedDayIndex === index}">
-                    <span class="text-[10px] uppercase">{{ day.weekday }}</span>
-                    <span class="text-lg font-bold">{{ day.dateNum }}</span>
+                    <span class="text-[10px] font-bold uppercase">{{ day.weekday }}</span>
+                    <span class="text-xl font-bold font-serif">{{ day.dateNum }}</span>
                 </div>
             </div>
+
             <div class="px-5">
-                <div class="mb-4">
-                    <h2 class="text-xl font-bold">{{ daysData[selectedDayIndex].location }}</h2>
-                    <p class="text-xs text-stone-400">{{ daysData[selectedDayIndex].desc }}</p>
+                <div class="flex items-center justify-between mb-4 bg-stone-50 p-4 rounded-2xl border border-stone-100" @click="openDayEditModal">
+                    <div>
+                        <h2 class="text-2xl font-bold text-stone-800">{{ daysData[selectedDayIndex].location }}</h2>
+                        <p class="text-xs text-stone-500">{{ daysData[selectedDayIndex].desc }}</p>
+                    </div>
+                    <div class="text-right flex flex-col items-end">
+                        <div class="flex items-center gap-1 text-amber-600">
+                            <i :data-lucide="getWeatherIcon(daysData[selectedDayIndex].weather)" class="w-4 h-4"></i>
+                            <span class="text-sm font-bold">{{ daysData[selectedDayIndex].weather }}</span>
+                        </div>
+                        <span class="text-lg font-serif font-bold text-stone-700">{{ daysData[selectedDayIndex].temp }}°C</span>
+                    </div>
                 </div>
-                <div v-for="(item, idx) in daysData[selectedDayIndex].itinerary" :key="item.id" class="mb-4">
-                    <div v-if="item.type === '航班'" class="bg-stone-800 text-white p-4 rounded-2xl" @click="editItem(item, idx)">
-                        <div class="flex justify-between text-xs opacity-70 mb-2"><span>{{item.name}}</span><i data-lucide="plane" class="w-4 h-4"></i></div>
-                        <div class="flex justify-between items-center text-xl font-bold">
-                            <span>{{item.dep}}</span><i data-lucide="chevron-right"></i><span>{{item.arr}}</span>
+
+                <div v-for="item in sortedItinerary" :key="item.id" class="mb-4">
+                    <div v-if="item.type === '航班'" class="bg-gradient-to-br from-stone-800 to-stone-900 text-white rounded-2xl p-5 shadow-lg" @click="editItem(item)">
+                        <div class="flex justify-between items-center border-b border-white/10 pb-3 mb-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="plane" class="w-4 h-4 text-amber-400"></i>
+                                <span class="text-sm font-bold tracking-wide">{{ item.name }}</span>
+                            </div>
+                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded tracking-tighter">{{ item.time }}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-center px-2">
+                            <div class="flex-1 text-left">
+                                <p class="text-2xl font-bold font-serif">{{ item.dep }}</p>
+                                <p class="text-[10px] opacity-50 uppercase tracking-widest">Departure</p>
+                            </div>
+                            <div class="flex-[2] px-4 flex flex-col items-center justify-center">
+                                <div class="w-full border-t border-dashed border-white/30 relative">
+                                    <i data-lucide="chevron-right" class="w-4 h-4 absolute -top-2 right-0 text-white/50"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 text-right">
+                                <p class="text-2xl font-bold font-serif">{{ item.arr }}</p>
+                                <p class="text-[10px] opacity-50 uppercase tracking-widest">Arrival</p>
+                            </div>
+                        </div>
+                        <div v-if="item.note" class="mt-4 pt-3 border-t border-white/5 text-[11px] text-stone-400 italic">
+                            {{ item.note }}
                         </div>
                     </div>
-                    <div v-else class="bg-white p-4 rounded-2xl border border-stone-100 shadow-sm flex gap-3" @click="editItem(item, idx)">
-                        <i :data-lucide="getIcon(item.type)" class="text-stone-300"></i>
+                    
+                    <div v-else 
+                         class="rounded-2xl p-4 border transition-all shadow-sm flex items-start gap-3" 
+                         :style="{ backgroundColor: item.color + '15', borderColor: item.color + '40' }"
+                         @click="editItem(item)">
+                        <i :data-lucide="getIcon(item.type)" class="w-5 h-5 mt-1" :style="{ color: item.color }"></i>
                         <div class="flex-1">
-                            <div class="flex justify-between font-bold text-sm"><span>{{item.name}}</span><span class="text-stone-400">{{item.time}}</span></div>
-                            <p class="text-xs text-stone-500 mt-1">{{item.note}}</p>
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-bold text-stone-800">{{ item.name }}</h3>
+                                <span class="text-[10px] font-bold text-stone-400 ml-2">{{ item.time }}</span>
+                            </div>
+                            <p class="text-xs text-stone-500 mt-1">{{ item.note }}</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="fab" @click="openModal('itinerary')"><i data-lucide="plus"></i></div>
+            <div class="fab" @click="openAddModal"><i data-lucide="plus" class="w-8 h-8"></i></div>
         </section>
 
-        <section v-if="currentTab === 'shopping'" class="p-5">
-            <h2 class="text-2xl font-bold mb-6">購物清單</h2>
+        <section v-if="currentTab === 'shopping'" class="p-5 pt-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2"><i data-lucide="shopping-basket"></i> 購物清單</h2>
             <div class="grid grid-cols-2 gap-4">
-                <div v-for="(item, idx) in shoppingList" :key="idx" class="shop-card shadow-sm relative">
+                <div v-for="(item, idx) in shoppingList" :key="idx" class="shop-card">
                     <img v-if="item.image" :src="item.image" class="shop-img">
-                    <div v-else class="shop-img flex items-center justify-center text-stone-300"><i data-lucide="image" class="w-10 h-10"></i></div>
-                    <div class="p-3 font-bold text-sm">{{ item.name }}</div>
-                    <button @click="removeItem('shopping', idx)" class="absolute top-2 right-2 bg-black/30 text-white rounded-full p-1"><i data-lucide="x" class="w-3 h-3"></i></button>
+                    <div v-else class="shop-img flex items-center justify-center text-stone-200"><i data-lucide="image" class="w-10 h-10"></i></div>
+                    <div class="p-3"><p class="font-bold text-sm text-stone-800">{{ item.name }}</p></div>
                 </div>
             </div>
-            <div v-if="shoppingList.length === 0" class="text-center py-20 text-stone-300">清單還是空的，去逛逛吧！</div>
-            <div class="fab" @click="openModal('shopping')"><i data-lucide="plus"></i></div>
+            <div class="fab" @click="activeModal = 'shopping'"><i data-lucide="plus" class="w-8 h-8"></i></div>
         </section>
 
-        <section v-if="currentTab === 'expense'" class="p-5">
+        <section v-if="currentTab === 'expense'" class="p-5 pt-8">
             <div class="bg-stone-800 text-white rounded-3xl p-6 mb-6 shadow-lg">
-                <p class="text-stone-400 text-xs uppercase tracking-widest mb-1">Total Expense</p>
-                <h2 class="text-3xl font-serif font-bold">¥ {{ totalExpense.toLocaleString() }}</h2>
+                <p class="text-stone-400 text-xs mb-1 uppercase tracking-widest">Total Expenses</p>
+                <h2 class="text-2xl font-bold">£ {{ totalGBP.toLocaleString() }}</h2>
+                <h2 class="text-2xl font-bold">€ {{ totalEUR.toLocaleString() }}</h2>
             </div>
             <div class="space-y-3">
-                <div v-for="(exp, idx) in expenseList" :key="idx" class="bg-white p-4 rounded-2xl border border-stone-100 flex justify-between items-center">
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="text-[10px] bg-stone-100 px-2 py-0.5 rounded text-stone-500 font-bold">{{ exp.category }}</span>
-                            <span class="text-[10px] text-stone-400">{{ exp.date }}</span>
-                        </div>
-                        <p class="font-bold text-stone-800">{{ exp.name }}</p>
-                        <p class="text-[10px] text-stone-400">方式: {{ exp.payment }} | {{ exp.note }}</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="font-bold text-lg">¥ {{ exp.amount.toLocaleString() }}</p>
-                        <button @click="removeItem('expense', idx)" class="text-red-300 text-xs">刪除</button>
-                    </div>
+                <div v-for="(exp, idx) in expenseList" :key="idx" class="bg-white p-4 rounded-2xl border border-stone-100 flex justify-between items-center shadow-sm">
+                    <div><p class="text-[10px] text-stone-400 mb-1">{{ exp.category }}</p><p class="font-bold text-stone-800">{{ exp.name }}</p></div>
+                    <p class="font-bold text-lg font-serif">{{ exp.currency === '英鎊' ? '£' : '€' }} {{ exp.amount }}</p>
                 </div>
             </div>
-            <div v-if="expenseList.length === 0" class="text-center py-20 text-stone-300">尚無任何花費記錄</div>
-            <div class="fab" @click="openModal('expense')"><i data-lucide="plus"></i></div>
+            <div class="fab" @click="openExpenseModal"><i data-lucide="plus" class="w-8 h-8"></i></div>
         </section>
 
-        <section v-if="currentTab === 'info'" class="p-6">
+        <section v-if="currentTab === 'info'" class="p-6 pt-8">
             <h2 class="text-2xl font-bold mb-6">工具箱</h2>
-            <div class="bg-white p-6 rounded-3xl shadow-sm border border-stone-100">
-                <label class="text-xs font-bold text-stone-400 uppercase">GBP to HKD (10.38)</label>
-                <input type="number" v-model="gbpInput" class="text-2xl font-bold">
-                <p class="text-stone-800 text-2xl font-bold mt-4">≈ $ {{ (gbpInput * 10.38).toFixed(2) }} HKD</p>
+            <div class="space-y-4">
+                <div class="bg-stone-800 rounded-3xl p-6 text-white"><p class="text-xs mb-2">GBP to HKD</p><input type="number" v-model="gbpVal" class="bg-white/10 text-2xl font-bold w-full rounded p-2"><p class="text-amber-400 mt-2 font-bold">$ {{ (gbpVal * 10.38).toFixed(2) }}</p></div>
+                <div class="bg-stone-600 rounded-3xl p-6 text-white"><p class="text-xs mb-2">EUR to HKD</p><input type="number" v-model="eurVal" class="bg-white/10 text-2xl font-bold w-full rounded p-2"><p class="text-emerald-400 mt-2 font-bold">$ {{ (eurVal * 8.65).toFixed(2) }}</p></div>
             </div>
         </section>
-    </div>
+    </main>
 
     <nav class="tab-bar">
-        <button v-for="t in tabs" :key="t.id" @click="currentTab = t.id" class="tab-item" :class="{active: currentTab === t.id}">
-            <i :data-lucide="t.icon"></i>
-            <span>{{ t.title }}</span>
-        </button>
+        <button v-for="t in tabs" :key="t.id" @click="currentTab = t.id" class="tab-item" :class="{active: currentTab === t.id}"><i :data-lucide="t.icon"></i><span>{{ t.name }}</span></button>
     </nav>
 
     <div v-if="activeModal" class="modal-overlay" @click.self="activeModal = null">
         <div class="modal-content">
-            <h3 class="text-xl font-bold mb-6">新增{{ modalTitle }}</h3>
-            
-            <div v-if="activeModal === 'shopping'" class="space-y-4">
-                <div><label class="text-xs font-bold text-stone-400">商品名稱</label><input v-model="shopForm.name" placeholder="例如：Jo Malone 香水"></div>
-                <div><label class="text-xs font-bold text-stone-400">上傳圖片</label>
-                    <div class="mt-2 border-2 border-dashed border-stone-200 rounded-2xl p-4 text-center relative">
-                        <input type="file" @change="handleUpload" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
-                        <div v-if="!shopForm.image" class="text-stone-400"><i data-lucide="camera" class="mx-auto mb-1"></i><p class="text-xs">點擊拍照或選擇照片</p></div>
-                        <img v-else :src="shopForm.image" class="max-h-40 mx-auto rounded-lg">
-                    </div>
-                </div>
-                <button @click="addShopping" class="w-full py-4 bg-stone-800 text-white rounded-2xl font-bold">存入清單</button>
-            </div>
-
-            <div v-if="activeModal === 'expense'" class="space-y-4">
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-xs font-bold text-stone-400">類別</label><select v-model="expForm.category"><option v-for="c in categories">{{c}}</option></select></div>
-                    <div><label class="text-xs font-bold text-stone-400">日期</label><input type="date" v-model="expForm.date"></div>
-                </div>
-                <div><label class="text-xs font-bold text-stone-400">名稱</label><input v-model="expForm.name" placeholder="消費項目名稱"></div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div><label class="text-xs font-bold text-stone-400">金額 (日幣)</label><input type="number" v-model.number="expForm.amount" placeholder="0"></div>
-                    <div><label class="text-xs font-bold text-stone-400">付款方式</label><select v-model="expForm.payment"><option>現金</option><option>信用卡</option></select></div>
-                </div>
-                <div><label class="text-xs font-bold text-stone-400">備註</label><input v-model="expForm.note" placeholder="選填"></div>
-                <button @click="addExpense" class="w-full py-4 bg-stone-800 text-white rounded-2xl font-bold">記錄花費</button>
-            </div>
-
+            <h3 class="text-xl font-bold mb-6">編輯項目</h3>
             <div v-if="activeModal === 'itinerary'" class="space-y-4">
+                <div class="flex justify-between gap-2 mb-2"><div v-for="c in colorPalette" :key="c" class="color-dot" :style="{ backgroundColor: c }" :class="{ active: form.color === c }" @click="form.color = c"></div></div>
                 <select v-model="form.type"><option>景點</option><option>美食</option><option>交通</option><option>住宿</option><option>航班</option></select>
-                <input v-model="form.name" placeholder="名稱">
-                <input v-model="form.time" placeholder="時間">
-                <textarea v-model="form.note" placeholder="備註"></textarea>
-                <button @click="saveItem" class="w-full py-4 bg-stone-800 text-white rounded-2xl font-bold">儲存行程</button>
+                <div v-if="form.type === '航班'" class="grid grid-cols-2 gap-2"><input v-model="form.dep" placeholder="起飛 (HKG)"><input v-model="form.arr" placeholder="抵達 (LHR)"></div>
+                <input v-model="form.name" placeholder="名稱"><input v-model="form.time" placeholder="時間 (09:00)"><textarea v-model="form.note" placeholder="備註"></textarea>
+                <button @click="saveItem" class="w-full py-4 bg-stone-800 text-white rounded-2xl font-bold">儲存</button>
+                <button v-if="isEditing" @click="deleteItem" class="w-full py-2 text-red-500 text-sm">刪除</button>
+            </div>
+            <div v-if="activeModal === 'dayEdit'" class="space-y-4">
+                <div class="grid grid-cols-2 gap-3"><select v-model="daysData[selectedDayIndex].weather"><option>晴朗</option><option>多雲</option><option>陰天</option><option>有雨</option></select><input type="number" v-model="daysData[selectedDayIndex].temp"></div>
+                <button @click="activeModal = null" class="w-full py-4 bg-stone-800 text-white rounded-2xl font-bold">更新</button>
             </div>
         </div>
     </div>
@@ -176,95 +171,89 @@
 
 <script>
     const { createApp, ref, computed, nextTick, watch } = Vue;
-
     createApp({
         setup() {
             const currentTab = ref('itinerary');
-            const activeModal = ref(null);
             const selectedDayIndex = ref(0);
-            const gbpInput = ref(1);
+            const activeModal = ref(null);
+            const isEditing = ref(false);
+            const editId = ref(null);
+            const gbpVal = ref(1);
+            const eurVal = ref(1);
+            const colorPalette = ['#4A4238', '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
             const tabs = [
-                { id: 'itinerary', title: '行程', icon: 'map-pin' },
-                { id: 'shopping', title: '購物', icon: 'shopping-basket' },
-                { id: 'expense', title: '花費', icon: 'banknote' },
-                { id: 'info', title: '工具', icon: 'info' }
+                { id: 'itinerary', name: '行程', icon: 'map-pin' },
+                { id: 'shopping', name: '購物', icon: 'shopping-basket' },
+                { id: 'expense', name: '花費', icon: 'banknote' },
+                { id: 'info', name: '工具', icon: 'info' }
             ];
 
-            // 數據初始化
             const daysData = ref([
-                { weekday: 'Tue', dateNum: '10', location: '倫敦', desc: '抵達倫敦', itinerary: [{ id: 1, type: '航班', name: 'CX239 香港 > 倫敦', dep: 'HKG', arr: 'LHR', time: '10:40', note: '17:20 抵達 T3' }] },
-                { weekday: 'Wed', dateNum: '11', location: '倫敦', desc: 'Outlet 購物', itinerary: [] },
-                // ... 其他日期略
+                { weekday: 'Tue', dateNum: '10', location: '倫敦', desc: '蜜月第一天', weather: '多雲', temp: 12, itinerary: [
+                    { id: 1, type: '航班', name: 'CX239 香港 > 倫敦', time: '10:40', dep:'HKG', arr:'LHR', note: '17:20 抵達 LHR T3' },
+                    { id: 2, type: '住宿', name: 'Merit Kensington', time: '19:30', color: '#8B5CF6' }
+                ]},
+                { weekday: 'Wed', dateNum: '11', location: '牛津', desc: 'Outlet 購物', weather: '晴朗', temp: 10, itinerary: [{ id: 4, type: '交通', name: 'Bicester Village', time: '09:30', color: '#4A4238' }] },
+                { weekday: 'Thu', dateNum: '12', location: '倫敦', desc: '大笨鐘', weather: '陣雨', temp: 11, itinerary: [{ id: 7, type: '景點', name: '科芬園', time: '10:00', color: '#3B82F6' }] },
+                { weekday: 'Fri', dateNum: '13', location: '倫敦', desc: '美食巡禮', weather: '多雲', temp: 13, itinerary: [{ id: 11, type: '美食', name: 'Borough Market', time: '12:00', color: '#10B981' }] },
+                { weekday: 'Sat', dateNum: '14', location: '倫敦', desc: '車路士球賽', weather: '多雲', temp: 12, itinerary: [{ id: 14, type: '景點', name: 'Stamford Bridge', time: '17:30', color: '#F59E0B' }] },
+                { weekday: 'Sun', dateNum: '15', location: '倫敦 > 荷蘭', desc: '跨國飛行', weather: '陰天', temp: 9, itinerary: [
+                    // Day 6 航班修改為卡片格式
+                    { id: 17, type: '航班', name: 'BA440 倫敦 > 阿姆斯特丹', time: '14:10', dep:'LHR', arr:'AMS', note: '16:35 抵達 Schiphol' }
+                ]},
+                { weekday: 'Mon', dateNum: '16', location: '阿姆斯特丹', desc: '運河藝術', weather: '陰天', temp: 8, itinerary: [{ id: 21, type: '景點', name: '梵谷博物館', time: '10:00', color: '#3B82F6' }] },
+                { weekday: 'Tue', dateNum: '17', location: '布魯塞爾', desc: '朱古力', weather: '晴朗', temp: 10, itinerary: [{ id: 24, type: '景點', name: '大廣場', time: '11:00', color: '#3B82F6' }] },
+                { weekday: 'Wed', dateNum: '18', location: '鹿特丹', desc: '現代建築', weather: '陰天', temp: 9, itinerary: [{ id: 27, type: '景點', name: '方塊屋', time: '11:00', color: '#3B82F6' }] },
+                { weekday: 'Thu', dateNum: '19', location: '阿姆斯特丹', desc: '啟程返港', weather: '多雲', temp: 10, itinerary: [
+                    // Day 10 航班修改為卡片格式
+                    { id: 30, type: '航班', name: 'CX270 阿姆斯特丹 > 香港', time: '12:30', dep:'AMS', arr:'HKG', note: '機上休息' }
+                ]},
+                { weekday: 'Fri', dateNum: '20', location: '香港', desc: '蜜月結束', weather: '晴朗', temp: 22, itinerary: [{ id: 32, type: '景點', name: '抵達香港', time: '07:30', color: '#10B981' }] }
             ]);
 
-            // 購物與花費數據
-            const shoppingList = ref([]);
-            const expenseList = ref([]);
-            const categories = ['交通', '飲食', '住宿', '門票', '購物', '其他'];
-
-            // 表單對象
-            const shopForm = ref({ name: '', image: null });
-            const expForm = ref({ category: '飲食', name: '', date: new Date().toISOString().split('T')[0], amount: 0, payment: '現金', note: '' });
-            const form = ref({ type: '景點', name: '', time: '', note: '' });
-
-            const modalTitle = computed(() => {
-                if(activeModal.value === 'shopping') return '商品';
-                if(activeModal.value === 'expense') return '記錄';
-                return '行程';
+            const sortedItinerary = computed(() => {
+                const items = [...daysData.value[selectedDayIndex.value].itinerary];
+                return items.sort((a, b) => (a.time || "").localeCompare(b.time || ""));
             });
 
-            const totalExpense = computed(() => expenseList.value.reduce((sum, item) => sum + (item.amount || 0), 0));
+            const shoppingList = ref([]);
+            const expenseList = ref([]);
+            const expForm = ref({ category: '飲食', name: '', date: '', currency: '英鎊', amount: null });
+            const form = ref({ type: '景點', name: '', time: '', note: '', color: '#3B82F6', dep: '', arr: '' });
 
-            const openModal = (type) => {
-                activeModal.value = type;
-                if(type === 'expense') expForm.value.date = new Date().toISOString().split('T')[0];
-                nextTick(() => lucide.createIcons());
-            };
+            const totalGBP = computed(() => expenseList.value.filter(i => i.currency === '英鎊').reduce((sum, i) => sum + (i.amount || 0), 0));
+            const totalEUR = computed(() => expenseList.value.filter(i => i.currency === '歐元').reduce((sum, i) => sum + (i.amount || 0), 0));
 
-            const handleUpload = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (f) => { shopForm.value.image = f.target.result; };
-                    reader.readAsDataURL(file);
-                }
-            };
-
-            const addShopping = () => {
-                if(!shopForm.value.name) return;
-                shoppingList.value.push({ ...shopForm.value });
-                shopForm.value = { name: '', image: null };
-                activeModal.value = null;
-            };
-
-            const addExpense = () => {
-                if(!expForm.value.name || !expForm.value.amount) return;
-                expenseList.value.push({ ...expForm.value });
-                expForm.value = { category: '飲食', name: '', date: new Date().toISOString().split('T')[0], amount: 0, payment: '現金', note: '' };
-                activeModal.value = null;
-            };
-
+            const openAddModal = () => { isEditing.value = false; form.value = { type: '景點', name: '', time: '', note: '', color: '#3B82F6', dep:'', arr:'' }; activeModal.value = 'itinerary'; };
+            const editItem = (item) => { isEditing.value = true; editId.value = item.id; form.value = { ...item }; activeModal.value = 'itinerary'; };
             const saveItem = () => {
-                daysData.value[selectedDayIndex.value].itinerary.push({ id: Date.now(), ...form.value });
+                const dayItin = daysData.value[selectedDayIndex.value].itinerary;
+                if(isEditing.value) {
+                    const idx = dayItin.findIndex(i => i.id === editId.value);
+                    dayItin[idx] = { ...form.value };
+                } else {
+                    dayItin.push({ id: Date.now(), ...form.value });
+                }
+                activeModal.value = null;
+            };
+            const deleteItem = () => {
+                const dayItin = daysData.value[selectedDayIndex.value].itinerary;
+                const idx = dayItin.findIndex(i => i.id === editId.value);
+                dayItin.splice(idx, 1);
                 activeModal.value = null;
             };
 
-            const removeItem = (type, idx) => {
-                if(type === 'shopping') shoppingList.value.splice(idx, 1);
-                if(type === 'expense') expenseList.value.splice(idx, 1);
-            };
-
+            const openDayEditModal = () => activeModal.value = 'dayEdit';
+            const openExpenseModal = () => { activeModal.value = 'expense'; };
+            const addExpense = () => { if(expForm.value.name) expenseList.value.push({...expForm.value}); activeModal.value = null; };
             const getIcon = (t) => ({'景點':'camera','美食':'utensils','交通':'bus','住宿':'bed','航班':'plane'}[t] || 'map-pin');
+            const getWeatherIcon = (w) => ({'晴朗':'sun','多雲':'cloud','陰天':'cloudy','有雨':'cloud-rain'}[w] || 'cloud');
 
             watch([currentTab, activeModal, selectedDayIndex], () => nextTick(() => lucide.createIcons()));
             nextTick(() => lucide.createIcons());
 
-            return { 
-                currentTab, tabs, daysData, selectedDayIndex, activeModal, modalTitle,
-                shoppingList, shopForm, expenseList, expForm, categories, totalExpense,
-                openModal, handleUpload, addShopping, addExpense, saveItem, removeItem, getIcon, gbpInput, form
-            };
+            return { currentTab, tabs, daysData, selectedDayIndex, sortedItinerary, activeModal, isEditing, form, colorPalette, expenseList, expForm, shoppingList, totalGBP, totalEUR, gbpVal, eurVal, openAddModal, editItem, saveItem, deleteItem, openDayEditModal, openExpenseModal, addExpense, getIcon, getWeatherIcon };
         }
     }).mount('#app');
 </script>

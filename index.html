@@ -7,36 +7,35 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/4.0.0/vuedraggable.umd.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
         :root { --british-brown: #5D5344; --british-bg: #F4F1EA; }
         body { font-family: 'Noto Sans TC', sans-serif; background-color: var(--british-bg); color: #4A4238; -webkit-tap-highlight-color: transparent; }
-        .banner-container { height: 250px; width: 100%; position: relative; overflow: hidden; background: #A0C4D3; }
-        .banner-img { width: 100%; height: 100%; object-fit: cover; }
+        .banner-container { height: 200px; width: 100%; position: relative; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1486299267070-83823f5448dd?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; }
         .nav-tabs { position: absolute; right: 16px; bottom: 65px; display: flex; gap: 8px; z-index: 20; }
-        .nav-btn { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); border-radius: 12px; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.5); color: #5D5344; }
+        .nav-btn { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); border-radius: 12px; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: #5D5344; }
         .nav-btn.active { background: var(--british-brown); color: white; }
-        .main-content { background-color: #FFFFFF; border-radius: 35px 35px 0 0; margin-top: -50px; position: relative; z-index: 10; min-height: 85vh; padding-bottom: 100px; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); }
-        .date-scroller { display: flex; overflow-x: auto; padding: 20px; gap: 12px; }
+        .main-content { background-color: #FFFFFF; border-radius: 35px 35px 0 0; margin-top: -40px; position: relative; z-index: 10; min-height: 85vh; padding-bottom: 100px; }
+        .date-scroller { display: flex; overflow-x: auto; padding: 20px; gap: 12px; scrollbar-width: none; }
         .date-scroller::-webkit-scrollbar { display: none; }
-        .date-item { min-width: 65px; display: flex; flex-direction: column; align-items: center; padding: 12px 5px; border-radius: 18px; border: 1px solid #EFEBE5; background: white; }
-        .date-item.active { background-color: var(--british-brown); color: white; border-color: var(--british-brown); }
-        .fab { position: fixed; bottom: 30px; right: 25px; width: 60px; height: 60px; background-color: var(--british-brown); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2); z-index: 50; cursor: pointer; }
-        .flight-card { background: linear-gradient(135deg, #4A4238 0%, #2D2822 100%); color: white; border-radius: 20px; padding: 18px; }
+        .date-item { min-width: 60px; display: flex; flex-direction: column; align-items: center; padding: 12px 5px; border-radius: 18px; border: 1px solid #EFEBE5; background: white; transition: all 0.3s; }
+        .date-item.active { background-color: var(--british-brown); color: white; transform: scale(1.05); }
+        .fab { position: fixed; bottom: 30px; right: 25px; width: 60px; height: 60px; background-color: var(--british-brown); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2); z-index: 50; }
+        .flight-card { background: linear-gradient(135deg, #4A4238 0%, #2D2822 100%); color: white; border-radius: 20px; padding: 18px; margin-bottom: 15px; }
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: flex; align-items: flex-end; }
-        .modal-content { background: white; width: 100%; border-radius: 30px 30px 0 0; padding: 24px; max-height: 90vh; overflow-y: auto; animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        input, select, textarea { width: 100%; padding: 12px; background: #F8F6F2; border-radius: 12px; border: 1px solid #E2DDD5; margin-top: 5px; font-size: 16px; }
+        .modal-content { background: white; width: 100%; border-radius: 30px 30px 0 0; padding: 24px; max-height: 90vh; overflow-y: auto; }
+        input, select, textarea { width: 100%; padding: 12px; background: #F8F6F2; border-radius: 12px; border: 1px solid #E2DDD5; margin-top: 5px; }
+        .location-tag { font-size: 10px; background: #f0ede7; padding: 2px 8px; border-radius: 10px; color: #888; }
     </style>
 </head>
 <body>
 
 <div id="app">
     <header class="banner-container">
-        <img src="webappbanner.jpg" class="banner-img" alt="Banner">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <h1 class="text-white text-3xl font-serif font-bold tracking-widest">EUROPE 2026</h1>
+        </div>
         <nav class="nav-tabs">
             <button v-for="t in tabs" :key="t.id" @click="currentTab = t.id" class="nav-btn" :class="{active: currentTab === t.id}">
                 <i :data-lucide="t.icon" class="w-6 h-6"></i>
@@ -47,65 +46,55 @@
     <main class="main-content">
         <section v-if="currentTab === 'itinerary'" class="pt-2">
             <div class="date-scroller">
-                <div v-for="(day, index) in daysData" :key="index" @click="selectedDayIndex = index" class="date-item shadow-sm" :class="{active: selectedDayIndex === index}">
+                <div v-for="(day, index) in daysData" :key="index" @click="selectedDayIndex = index" class="date-item" :class="{active: selectedDayIndex === index}">
                     <span class="text-[10px] font-bold uppercase">{{ day.weekday }}</span>
                     <span class="text-xl font-bold font-serif">{{ day.dateNum }}</span>
                 </div>
             </div>
 
             <div class="px-5">
-                <div class="bg-blue-50/60 rounded-2xl p-4 mb-5 flex items-center justify-between border border-blue-100">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="cloud-sun" class="w-10 h-10 text-blue-500"></i>
-                        <div>
-                            <p class="text-sm font-bold text-stone-700">{{ daysData[selectedDayIndex].location }}</p>
-                            <p class="text-xs text-stone-500">體感 12°C</p>
-                        </div>
+                <div class="flex items-center justify-between mb-4 px-1">
+                    <div>
+                        <h2 class="text-2xl font-bold text-stone-800">{{ daysData[selectedDayIndex].location }}</h2>
+                        <p class="text-xs text-stone-500">{{ daysData[selectedDayIndex].desc }}</p>
                     </div>
-                    <p class="text-2xl font-serif font-bold text-stone-800">14°C</p>
+                    <div class="text-right">
+                        <span class="location-tag">Day {{ selectedDayIndex + 1 }}</span>
+                    </div>
                 </div>
 
-                <draggable v-model="daysData[selectedDayIndex].itinerary" item-key="id" handle=".drag-handle">
-                    <template #item="{element, index}">
-                        <div class="mb-5">
-                            <div v-if="index >= 0" class="flex items-center justify-center my-3 text-stone-400 gap-2 text-[10px]">
-                                <i data-lucide="bus" class="w-3.5 h-3.5"></i>
-                                <span>{{ element.transitText || '大眾運輸約 25 分鐘' }}</span>
-                            </div>
-
-                            <div v-if="element.type === '航班'" class="flight-card shadow-lg" @click="editItem(element, index)">
-                                <div class="flex justify-between items-center border-b border-white/20 pb-3 mb-3">
-                                    <span class="font-bold">{{ element.name }}</span>
-                                    <span class="text-[10px] bg-white/20 px-2 py-1 rounded">FLIGHT</span>
-                                </div>
-                                <div class="flex justify-between text-center items-center">
-                                    <div><p class="text-2xl font-bold">{{ element.dep }}</p><p class="text-[10px] opacity-70">{{ element.time ? element.time.split('-')[0] : '' }}</p></div>
-                                    <i data-lucide="plane" class="w-5 h-5 rotate-90 opacity-50"></i>
-                                    <div><p class="text-2xl font-bold">{{ element.arr }}</p><p class="text-[10px] opacity-70">{{ element.time ? element.time.split('-')[1] : '' }}</p></div>
-                                </div>
-                            </div>
-
-                            <div v-else class="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm flex items-center gap-3" @click="editItem(element, index)">
-                                <div class="drag-handle text-stone-300"><i data-lucide="grip-vertical" class="w-5 h-5"></i></div>
-                                <div class="flex-1">
-                                    <div class="flex justify-between">
-                                        <span class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">{{ element.type }}</span>
-                                        <span class="text-[10px] text-stone-400">{{ element.time }}</span>
-                                    </div>
-                                    <h3 class="font-bold text-stone-800 text-lg">{{ element.name }}</h3>
-                                    <p class="text-xs text-stone-500 mt-1 line-clamp-1">{{ element.note }}</p>
-                                </div>
-                                <button @click.stop="openNavigation(element.name)" class="text-blue-500 bg-blue-50 p-2 rounded-full">
-                                    <i data-lucide="navigation" class="w-5 h-5"></i>
-                                </button>
-                            </div>
+                <div v-for="(item, idx) in daysData[selectedDayIndex].itinerary" :key="item.id" class="mb-4">
+                    <div v-if="item.type === '航班'" class="flight-card shadow-lg" @click="editItem(item, idx)">
+                        <div class="flex justify-between items-center border-b border-white/20 pb-2 mb-3">
+                            <span class="text-sm font-bold">{{ item.name }}</span>
+                            <i data-lucide="plane" class="w-4 h-4"></i>
                         </div>
-                    </template>
-                </draggable>
-                
-                <div v-if="daysData[selectedDayIndex].itinerary.length === 0" class="text-center py-10 text-stone-300">
-                    <i data-lucide="calendar-plus" class="w-12 h-12 mx-auto mb-2 opacity-20"></i>
-                    <p>尚未安排行程</p>
+                        <div class="flex justify-between items-center text-center">
+                            <div><p class="text-2xl font-bold">{{ item.dep }}</p><p class="text-[10px] opacity-70">起飛</p></div>
+                            <div class="flex-1 border-t border-dashed border-white/30 mx-4 relative">
+                                <i data-lucide="chevron-right" class="w-4 h-4 absolute -top-2 right-0"></i>
+                            </div>
+                            <div><p class="text-2xl font-bold">{{ item.arr }}</p><p class="text-[10px] opacity-70">抵達</p></div>
+                        </div>
+                        <p class="text-[10px] mt-3 bg-white/10 p-2 rounded">{{ item.note }}</p>
+                    </div>
+
+                    <div v-else class="bg-white rounded-2xl p-4 border border-stone-100 shadow-sm flex items-start gap-3" @click="editItem(item, idx)">
+                        <div class="mt-1">
+                            <i :data-lucide="getIcon(item.type)" class="w-5 h-5 text-stone-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-bold text-stone-800 leading-tight">{{ item.name }}</h3>
+                                <span class="text-[10px] font-bold text-stone-400 ml-2 whitespace-nowrap">{{ item.time }}</span>
+                            </div>
+                            <p class="text-xs text-stone-500 mt-1">{{ item.note }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="daysData[selectedDayIndex].itinerary.length === 0" class="text-center py-20 text-stone-300">
+                    <p>本日尚無預設行程</p>
                 </div>
             </div>
             
@@ -114,84 +103,43 @@
             </div>
         </section>
 
-        <section v-if="currentTab === 'info'" class="p-6 space-y-6">
-            <h2 class="text-2xl font-bold font-serif text-stone-800 border-l-4 border-stone-800 pl-3">旅行工具箱</h2>
-            <div class="grid grid-cols-1 gap-4">
-                <div class="bg-stone-800 rounded-3xl p-5 text-white shadow-lg relative overflow-hidden">
-                    <div class="relative z-10">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="font-bold flex items-center gap-2 text-stone-300"><i data-lucide="pound-sterling" class="w-5 h-5"></i> 英鎊換算</h3>
-                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded">GBP to HKD</span>
-                        </div>
-                        <div class="flex items-end justify-between gap-4">
-                            <div class="flex-1">
-                                <p class="text-[10px] opacity-60 mb-1 uppercase">Amount (GBP)</p>
-                                <input type="number" v-model="gbpInput" class="bg-white/10 border-none text-2xl font-serif font-bold w-full rounded-xl p-2 text-white outline-none">
-                            </div>
-                            <div class="text-right">
-                                <p class="text-[10px] opacity-60 mb-1 uppercase">Result (HKD)</p>
-                                <span class="text-2xl font-serif font-bold text-amber-400">$ {{ (gbpInput * 10.38).toFixed(2) }}</span>
-                            </div>
-                        </div>
-                    </div>
+        <section v-if="currentTab === 'info'" class="p-6">
+            <h2 class="text-2xl font-bold font-serif mb-6">旅行工具箱</h2>
+            <div class="bg-stone-800 rounded-3xl p-6 text-white shadow-lg">
+                <div class="flex justify-between mb-4">
+                    <span class="text-stone-400">英鎊 GBP 換算</span>
+                    <span class="text-xs bg-white/10 px-2 py-1 rounded">1 GBP ≈ 10.38 HKD</span>
                 </div>
-                <div class="bg-[#4A5D44] rounded-3xl p-5 text-white shadow-lg relative overflow-hidden">
-                    <div class="relative z-10">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="font-bold flex items-center gap-2 text-stone-200"><i data-lucide="euro" class="w-5 h-5"></i> 歐元換算</h3>
-                            <span class="text-[10px] bg-white/10 px-2 py-1 rounded">EUR to HKD</span>
-                        </div>
-                        <div class="flex items-end justify-between gap-4">
-                            <div class="flex-1">
-                                <p class="text-[10px] opacity-60 mb-1 uppercase">Amount (EUR)</p>
-                                <input type="number" v-model="eurInput" class="bg-white/10 border-none text-2xl font-serif font-bold w-full rounded-xl p-2 text-white outline-none">
-                            </div>
-                            <div class="text-right">
-                                <p class="text-[10px] opacity-60 mb-1 uppercase">Result (HKD)</p>
-                                <span class="text-2xl font-serif font-bold text-lime-300">$ {{ (eurInput * 9.05).toFixed(2) }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="space-y-4">
-                <h3 class="font-bold text-stone-600 flex items-center gap-2"><i data-lucide="bed" class="w-5 h-5"></i> 住宿飯店</h3>
-                <div v-for="h in hotels" :key="h.name" class="bg-white border rounded-2xl p-4 shadow-sm">
-                    <h4 class="font-bold text-stone-800">{{ h.name }}</h4>
-                    <p class="text-xs text-stone-500 mt-1">{{ h.address }}</p>
-                    <div class="flex gap-4 mt-3">
-                        <a :href="'tel:'+h.tel" class="text-stone-600 text-xs flex items-center gap-1 border border-stone-200 px-3 py-1.5 rounded-lg"><i data-lucide="phone" class="w-3 h-3"></i> 打電話</a>
-                        <button @click="openNavigation(h.address)" class="text-stone-600 text-xs flex items-center gap-1 border border-stone-200 px-3 py-1.5 rounded-lg"><i data-lucide="map" class="w-3 h-3"></i> 導航</button>
-                    </div>
-                </div>
+                <input type="number" v-model="gbpInput" class="bg-white/10 border-none text-3xl font-bold text-white mb-2">
+                <p class="text-amber-400 text-2xl font-bold">$ {{ (gbpInput * 10.38).toFixed(2) }} HKD</p>
             </div>
         </section>
-
-        <section v-if="currentTab === 'shopping'" class="p-6">購物清單內容...</section>
-        <section v-if="currentTab === 'expense'" class="p-6">預算支出內容...</section>
     </main>
 
     <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-xl font-bold">{{ isEditing ? '編輯行程' : '新增行程' }}</h3>
-                <button @click="showModal = false" class="text-stone-400"><i data-lucide="x"></i></button>
+                <button @click="showModal = false"><i data-lucide="x" class="text-stone-400"></i></button>
             </div>
             <div class="space-y-4">
-                <div><label class="text-xs font-bold text-stone-500">分類</label>
+                <div><label class="text-xs font-bold text-stone-500 uppercase">分類</label>
                     <select v-model="form.type">
-                        <option>景點</option><option>住宿</option><option>美食</option><option>購物</option><option>航班</option><option>其他</option>
+                        <option>景點</option><option>美食</option><option>交通</option><option>住宿</option><option>航班</option>
                     </select>
                 </div>
-                <div><label class="text-xs font-bold text-stone-500">名稱</label><input v-model="form.name" placeholder="輸入目的地"></div>
-                <div class="flex gap-4">
-                    <div class="flex-1"><label class="text-xs font-bold text-stone-500">時間</label><input v-model="form.time" placeholder="14:00"></div>
-                    <div class="flex-1"><label class="text-xs font-bold text-stone-500">門票/預算</label><input v-model="form.ticket" placeholder="金額"></div>
+                <div><label class="text-xs font-bold text-stone-500 uppercase">名稱</label>
+                    <input v-model="form.name" placeholder="輸入目的地或活動">
                 </div>
-                <div><label class="text-xs font-bold text-stone-500">備註</label><textarea v-model="form.note" rows="2"></textarea></div>
+                <div><label class="text-xs font-bold text-stone-500 uppercase">時間 / 航班號</label>
+                    <input v-model="form.time" placeholder="例如 10:40 或 19:30">
+                </div>
+                <div><label class="text-xs font-bold text-stone-500 uppercase">備註</label>
+                    <textarea v-model="form.note" rows="3" placeholder="交通方式、必吃菜色等..."></textarea>
+                </div>
                 <div class="pt-4 space-y-3">
-                    <button @click="saveItem" class="w-full py-4 bg-stone-800 text-white rounded-2xl font-bold shadow-lg">儲存並關閉</button>
-                    <button v-if="isEditing" @click="deleteItem" class="w-full py-3 text-red-500 font-bold">刪除此行程</button>
+                    <button @click="saveItem" class="w-full py-4 bg-stone-800 text-white rounded-2xl font-bold shadow-lg">儲存行程</button>
+                    <button v-if="isEditing" @click="deleteItem" class="w-full py-2 text-red-500 text-sm">刪除此項目</button>
                 </div>
             </div>
         </div>
@@ -202,7 +150,6 @@
     const { createApp, ref, nextTick, watch } = Vue;
 
     createApp({
-        components: { 'draggable': window.vuedraggable },
         setup() {
             const currentTab = ref('itinerary');
             const selectedDayIndex = ref(0);
@@ -210,41 +157,82 @@
             const isEditing = ref(false);
             const editIndex = ref(null);
             const gbpInput = ref(1);
-            const eurInput = ref(1);
 
             const tabs = [
                 { id: 'itinerary', icon: 'map-pin' },
-                { id: 'info', icon: 'info' },
-                { id: 'shopping', icon: 'shopping-basket' },
-                { id: 'expense', icon: 'banknote' }
+                { id: 'info', icon: 'info' }
             ];
 
+            // 根據你的需求填寫的 11 天完整行程數據
             const daysData = ref([
-                { weekday: 'Tue', dateNum: '10', location: 'London', itinerary: [
-                    { id: 1, type: '航班', name: 'CX239 HKG > LHR', dep: 'HKG', arr: 'LHR', time: '10:40-17:20', note: '抵達後直達飯店', transitText: '飛機約 13.5 小時' }
+                { weekday: 'Tue', dateNum: '10', location: '倫敦', desc: '抵達倫敦', itinerary: [
+                    { id: 1, type: '航班', name: 'CX239 香港 > 倫敦', dep: 'HKG', arr: 'LHR', time: '10:40', note: '17:20 抵達 T3。搭 Piccadilly Line 直達 Earl\'s Court' },
+                    { id: 2, type: '住宿', name: 'Merit Kensington Hotel', time: '19:30', note: 'Check-in 入住' },
+                    { id: 3, type: '美食', name: 'The Troubadour', time: '20:30', note: '晚餐：具歷史氣息的餐廳，步行可達' }
                 ]},
-                { weekday: 'Wed', dateNum: '11', location: 'London', itinerary: [] },
-                { weekday: 'Thu', dateNum: '12', location: 'London', itinerary: [] },
-                { weekday: 'Fri', dateNum: '13', location: 'London', itinerary: [] },
-                { weekday: 'Sat', dateNum: '14', location: 'Paris', itinerary: [] },
-                { weekday: 'Sun', dateNum: '15', location: 'Paris', itinerary: [] },
-                { weekday: 'Mon', dateNum: '16', location: 'Paris', itinerary: [] },
-                { weekday: 'Tue', dateNum: '17', location: 'Amsterdam', itinerary: [] },
-                { weekday: 'Wed', dateNum: '18', location: 'Amsterdam', itinerary: [] },
-                { weekday: 'Thu', dateNum: '19', location: 'Amsterdam', itinerary: [] },
-                { weekday: 'Fri', dateNum: '20', location: 'Home', itinerary: [] }
+                { weekday: 'Wed', dateNum: '11', location: '牛津 / 購物', desc: 'Outlet 與文化之旅', itinerary: [
+                    { id: 4, type: '交通', name: '前往 Bicester Village', time: '09:30', note: 'Marylebone 車站搭火車 (1hr)' },
+                    { id: 5, type: '美食', name: 'Ottolenghi / Cecconi\'s', time: '12:00', note: 'Outlet 內午餐' },
+                    { id: 6, type: '景點', name: '牛津 (Oxford) 觀光', time: '15:00', note: '從 Outlet 搭火車 20 分鐘抵達' }
+                ]},
+                { weekday: 'Thu', dateNum: '12', location: '倫敦', desc: '經典地標 A', itinerary: [
+                    { id: 7, type: '景點', name: '科芬園 Covent Garden', time: '10:00', note: '街頭藝人表演' },
+                    { id: 8, type: '景點', name: '自然史博物館', time: '13:00', note: 'Natural History Museum' },
+                    { id: 9, type: '景點', name: '大笨鐘 & 國會大廈', time: '16:00', note: 'Big Ben 拍照聖地' },
+                    { id: 10, type: '美食', name: 'Flat Iron', time: '19:00', note: '平價美味牛排' }
+                ]},
+                { weekday: 'Fri', dateNum: '13', location: '倫敦', desc: '經典地標 B', itinerary: [
+                    { id: 11, type: '美食', name: 'Fatto (King\'s Cross)', time: '12:00', note: '國王十字車站午餐' },
+                    { id: 12, type: '景點', name: '倫敦眼 / 大笨鐘區', time: '14:30', note: '再次漫步或回訪博物館' },
+                    { id: 13, type: '美食', name: 'Borough Market', time: '18:00', note: '晚餐：異國美食市集' }
+                ]},
+                { weekday: 'Sat', dateNum: '14', location: '倫敦', desc: '車路士球賽日', itinerary: [
+                    { id: 14, type: '景點', name: 'Stamford Bridge 參觀', time: '12:00', note: '球場與博物館導覽' },
+                    { id: 15, type: '景點', name: '英超賽事：車路士 vs 紐卡素', time: '17:30', note: '現場感受熱血氣氛' },
+                    { id: 16, type: '美食', name: 'Butcher\'s Hook / Fox & Pheasant', time: '20:30', note: '球場周邊特色酒吧晚餐' }
+                ]},
+                { weekday: 'Sun', dateNum: '15', location: '倫敦 > 荷蘭', desc: '跨國飛行', itinerary: [
+                    { id: 17, type: '景點', name: 'Holland Park 散步', time: '10:00', note: '飯店週邊肯辛頓區早午餐' },
+                    { id: 18, type: '航班', name: 'BA440 倫敦 > 阿姆斯特丹', dep: 'LHR', arr: 'AMS', time: '14:10', note: '16:35 抵達。搭火車 20 分直達市中心' },
+                    { id: 19, type: '住宿', name: 'Inntel Hotels Amsterdam', time: '18:30', note: 'Check-in 入住' },
+                    { id: 20, type: '美食', name: 'Loetje Centraal', time: '20:00', note: '知名牛排晚餐' }
+                ]},
+                { weekday: 'Mon', dateNum: '16', location: '阿姆斯特丹', desc: '藝術與運河', itinerary: [
+                    { id: 21, type: '景點', name: '梵谷 & 國家博物館', time: '10:00', note: '世界級藝術巡禮' },
+                    { id: 22, type: '美食', name: 'The Pancake Bakery', time: '13:00', note: '荷蘭煎餅' },
+                    { id: 23, type: '景點', name: '運河遊船', time: '16:00', note: 'Amsterdam Canal Cruise' }
+                ]},
+                { weekday: 'Tue', dateNum: '17', location: '布魯塞爾', desc: '比利時一日遊', itinerary: [
+                    { id: 24, type: '景點', name: '布魯塞爾大廣場', time: '11:00', note: 'Grand Place' },
+                    { id: 25, type: '景點', name: '尿尿小童 & 巧克力', time: '14:00', note: '必買巧克力與鬆餅' },
+                    { id: 26, type: '美食', name: 'Chez Léon', time: '17:00', note: '淡菜薯條知名老店' }
+                ]},
+                { weekday: 'Wed', dateNum: '18', location: '鹿特丹', desc: '現代建築巡禮', itinerary: [
+                    { id: 27, type: '交通', name: '搭火車前往鹿特丹', time: '09:00', note: '車程約 40-75 分鐘' },
+                    { id: 28, type: '景點', name: '方塊屋 / Markthal 市場', time: '11:00', note: '參觀現代建築與拱形市場' },
+                    { id: 29, type: '景點', name: '伊拉斯謨橋', time: '15:00', note: '天鵝橋拍照' }
+                ]},
+                { weekday: 'Thu', dateNum: '19', location: '阿姆斯特丹', desc: '最後採買與返程', itinerary: [
+                    { id: 30, type: '航班', name: 'CX270 阿姆斯特丹 > 香港', dep: 'AMS', arr: 'HKG', time: '12:30', note: '建議 09:30 前往機場' },
+                    { id: 31, type: '交通', name: '前往史基浦機場', time: '09:30', note: '步行至車站搭火車' }
+                ]},
+                { weekday: 'Fri', dateNum: '20', location: '香港', desc: '抵達溫暖的家', itinerary: [
+                    { id: 32, type: '景點', name: '抵達香港', time: '07:30', note: '結束行程' }
+                ]}
             ]);
 
-            const hotels = [
-                { name: 'Merit Kensington Hotel', address: '25 Courtfield Gardens, London SW5 0PG', tel: '+44 20 7373 5515' }
-            ];
+            const form = ref({ type: '景點', name: '', time: '', note: '' });
 
-            const form = ref({ type: '景點', name: '', time: '', ticket: '', note: '' });
+            const getIcon = (type) => {
+                const map = { '景點': 'camera', '美食': 'utensils', '交通': 'bus', '住宿': 'bed', '航班': 'plane' };
+                return map[type] || 'map-pin';
+            };
 
             const openAddModal = () => {
                 isEditing.value = false;
-                form.value = { type: '景點', name: '', time: '', ticket: '', note: '' };
+                form.value = { type: '景點', name: '', time: '', note: '' };
                 showModal.value = true;
+                nextTick(() => lucide.createIcons());
             };
 
             const editItem = (item, index) => {
@@ -252,43 +240,38 @@
                 editIndex.value = index;
                 form.value = { ...item };
                 showModal.value = true;
+                nextTick(() => lucide.createIcons());
             };
 
             const saveItem = () => {
-                if (!form.value.name) return alert('請輸入行程名稱');
-                
+                const list = daysData.value[selectedDayIndex.value].itinerary;
                 if (isEditing.value) {
-                    daysData.value[selectedDayIndex.value].itinerary[editIndex.value] = { ...form.value };
+                    list[editIndex.value] = { ...form.value };
                 } else {
-                    daysData.value[selectedDayIndex.value].itinerary.push({ 
-                        id: Date.now(), 
-                        ...form.value 
-                    });
+                    list.push({ id: Date.now(), ...form.value });
                 }
-                
                 showModal.value = false;
-                // 儲存後立即重新渲染圖示
                 nextTick(() => lucide.createIcons());
             };
 
             const deleteItem = () => {
-                if (confirm('確定刪除？')) {
-                    daysData.value[selectedDayIndex.value].itinerary.splice(editIndex.value, 1);
-                    showModal.value = false;
-                    nextTick(() => lucide.createIcons());
-                }
+                daysData.value[selectedDayIndex.value].itinerary.splice(editIndex.value, 1);
+                showModal.value = false;
             };
 
-            const openNavigation = (loc) => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`, '_blank');
+            // 監聽日期切換，自動渲染圖示
+            watch(selectedDayIndex, () => {
+                nextTick(() => lucide.createIcons());
+            });
 
-            // 監聽所有切換行為，確保圖示更新
-            watch([currentTab, selectedDayIndex, showModal], () => {
+            // 監聽 Tab 切換
+            watch(currentTab, () => {
                 nextTick(() => lucide.createIcons());
             });
 
             nextTick(() => lucide.createIcons());
 
-            return { tabs, currentTab, daysData, selectedDayIndex, showModal, isEditing, form, gbpInput, eurInput, hotels, openAddModal, editItem, saveItem, deleteItem, openNavigation };
+            return { tabs, currentTab, daysData, selectedDayIndex, showModal, isEditing, form, gbpInput, getIcon, openAddModal, editItem, saveItem, deleteItem };
         }
     }).mount('#app');
 </script>

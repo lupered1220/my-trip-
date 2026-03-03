@@ -102,6 +102,11 @@
                         </div>
                     </template>
                 </draggable>
+                
+                <div v-if="daysData[selectedDayIndex].itinerary.length === 0" class="text-center py-10 text-stone-300">
+                    <i data-lucide="calendar-plus" class="w-12 h-12 mx-auto mb-2 opacity-20"></i>
+                    <p>尚未安排行程</p>
+                </div>
             </div>
             
             <div class="fab" @click="openAddModal">
@@ -128,7 +133,7 @@
                             </div>
                             <div class="text-right">
                                 <p class="text-[10px] opacity-60 mb-1 uppercase">Result (HKD)</p>
-                                <span class="text-2xl font-serif font-bold text-amber-400">$ {{ (gbpInput * 10.02).toFixed(2) }}</span>
+                                <span class="text-2xl font-serif font-bold text-amber-400">$ {{ (gbpInput * 10.38).toFixed(2) }}</span>
                             </div>
                         </div>
                     </div>
@@ -150,7 +155,7 @@
                             </div>
                             <div class="text-right">
                                 <p class="text-[10px] opacity-60 mb-1 uppercase">Result (HKD)</p>
-                                <span class="text-2xl font-serif font-bold text-lime-300">$ {{ (eurInput * 8.45).toFixed(2) }}</span>
+                                <span class="text-2xl font-serif font-bold text-lime-300">$ {{ (eurInput * 9.05).toFixed(2) }}</span>
                             </div>
                         </div>
                     </div>
@@ -213,8 +218,6 @@
             const showModal = ref(false);
             const isEditing = ref(false);
             const editIndex = ref(null);
-            
-            // 修正處：補齊匯率變數
             const gbpInput = ref(1);
             const eurInput = ref(1);
 
@@ -225,13 +228,28 @@
                 { id: 'expense', icon: 'banknote' }
             ];
 
+            // 完整 11 天數據結構
             const daysData = ref([
                 { weekday: 'Tue', dateNum: '10', location: 'London', itinerary: [
                     { id: 1, type: '航班', name: 'CX239 HKG > LHR', dep: 'HKG', arr: 'LHR', time: '10:40-17:20', note: '抵達後搭 Piccadilly Line 直達飯店', transitText: '飛機約 13.5 小時' },
                     { id: 2, type: '住宿', name: 'Merit Kensington Hotel', time: '19:30', note: '入住', transitText: '地鐵約 50 分鐘' }
                 ]},
-                { weekday: 'Wed', dateNum: '11', location: 'Oxford', itinerary: [] }
-                // ... 其他天數數據
+                { weekday: 'Wed', dateNum: '11', location: 'London / Oxford', itinerary: [
+                    { id: 3, type: '景點', name: '牛津大學城', time: '09:00', note: '搭乘火車前往 Oxford', transitText: '火車約 1 小時' }
+                ]},
+                { weekday: 'Thu', dateNum: '12', location: 'London', itinerary: [] },
+                { weekday: 'Fri', dateNum: '13', location: 'London', itinerary: [] },
+                { weekday: 'Sat', dateNum: '14', location: 'London > Paris', itinerary: [
+                    { id: 4, type: '其他', name: '歐洲之星 Eurostar', time: '10:00', note: '前往巴黎', transitText: '高鐵約 2.5 小時' }
+                ]},
+                { weekday: 'Sun', dateNum: '15', location: 'Paris', itinerary: [] },
+                { weekday: 'Mon', dateNum: '16', location: 'Paris', itinerary: [] },
+                { weekday: 'Tue', dateNum: '17', location: 'Paris > Amsterdam', itinerary: [] },
+                { weekday: 'Wed', dateNum: '18', location: 'Amsterdam', itinerary: [] },
+                { weekday: 'Thu', dateNum: '19', location: 'Amsterdam', itinerary: [] },
+                { weekday: 'Fri', dateNum: '20', location: 'AMS > HKG', itinerary: [
+                    { id: 5, type: '航班', name: 'CX270 AMS > HKG', dep: 'AMS', arr: 'HKG', time: '13:10-06:20', note: '返程航班', transitText: '飛機約 11 小時' }
+                ]}
             ]);
 
             const hotels = [
@@ -271,9 +289,8 @@
                 }
             };
 
-            const openNavigation = (loc) => window.open(`http://googleusercontent.com/maps.google.com/?q=${encodeURIComponent(loc)}`, '_blank');
+            const openNavigation = (loc) => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`, '_blank');
 
-            // 監聽圖標渲染
             watch([currentTab, selectedDayIndex, showModal], () => nextTick(() => lucide.createIcons()));
             nextTick(() => lucide.createIcons());
 

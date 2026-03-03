@@ -79,9 +79,9 @@
                                     <span class="text-[10px] bg-white/20 px-2 py-1 rounded">FLIGHT</span>
                                 </div>
                                 <div class="flex justify-between text-center items-center">
-                                    <div><p class="text-2xl font-bold">{{ element.dep }}</p><p class="text-[10px] opacity-70">{{ element.time.split('-')[0] }}</p></div>
+                                    <div><p class="text-2xl font-bold">{{ element.dep }}</p><p class="text-[10px] opacity-70">{{ element.time ? element.time.split('-')[0] : '' }}</p></div>
                                     <i data-lucide="plane" class="w-5 h-5 rotate-90 opacity-50"></i>
-                                    <div><p class="text-2xl font-bold">{{ element.arr }}</p><p class="text-[10px] opacity-70">{{ element.time.split('-')[1] }}</p></div>
+                                    <div><p class="text-2xl font-bold">{{ element.arr }}</p><p class="text-[10px] opacity-70">{{ element.time ? element.time.split('-')[1] : '' }}</p></div>
                                 </div>
                             </div>
 
@@ -116,14 +116,11 @@
 
         <section v-if="currentTab === 'info'" class="p-6 space-y-6">
             <h2 class="text-2xl font-bold font-serif text-stone-800 border-l-4 border-stone-800 pl-3">旅行工具箱</h2>
-            
             <div class="grid grid-cols-1 gap-4">
                 <div class="bg-stone-800 rounded-3xl p-5 text-white shadow-lg relative overflow-hidden">
                     <div class="relative z-10">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="font-bold flex items-center gap-2 text-stone-300">
-                                <i data-lucide="pound-sterling" class="w-5 h-5"></i> 英鎊換算
-                            </h3>
+                            <h3 class="font-bold flex items-center gap-2 text-stone-300"><i data-lucide="pound-sterling" class="w-5 h-5"></i> 英鎊換算</h3>
                             <span class="text-[10px] bg-white/10 px-2 py-1 rounded">GBP to HKD</span>
                         </div>
                         <div class="flex items-end justify-between gap-4">
@@ -137,15 +134,11 @@
                             </div>
                         </div>
                     </div>
-                    <i data-lucide="landmark" class="absolute -right-4 -bottom-4 w-24 h-24 text-white/5 rotate-12"></i>
                 </div>
-
                 <div class="bg-[#4A5D44] rounded-3xl p-5 text-white shadow-lg relative overflow-hidden">
                     <div class="relative z-10">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="font-bold flex items-center gap-2 text-stone-200">
-                                <i data-lucide="euro" class="w-5 h-5"></i> 歐元換算
-                            </h3>
+                            <h3 class="font-bold flex items-center gap-2 text-stone-200"><i data-lucide="euro" class="w-5 h-5"></i> 歐元換算</h3>
                             <span class="text-[10px] bg-white/10 px-2 py-1 rounded">EUR to HKD</span>
                         </div>
                         <div class="flex items-end justify-between gap-4">
@@ -159,11 +152,9 @@
                             </div>
                         </div>
                     </div>
-                    <i data-lucide="castle" class="absolute -right-4 -bottom-4 w-24 h-24 text-white/5 rotate-12"></i>
                 </div>
             </div>
-
-            <div class="space-y-4 pt-2">
+            <div class="space-y-4">
                 <h3 class="font-bold text-stone-600 flex items-center gap-2"><i data-lucide="bed" class="w-5 h-5"></i> 住宿飯店</h3>
                 <div v-for="h in hotels" :key="h.name" class="bg-white border rounded-2xl p-4 shadow-sm">
                     <h4 class="font-bold text-stone-800">{{ h.name }}</h4>
@@ -208,7 +199,7 @@
 </div>
 
 <script>
-    const { createApp, ref, computed, nextTick, watch } = Vue;
+    const { createApp, ref, nextTick, watch } = Vue;
 
     createApp({
         components: { 'draggable': window.vuedraggable },
@@ -228,33 +219,24 @@
                 { id: 'expense', icon: 'banknote' }
             ];
 
-            // 完整 11 天數據結構
             const daysData = ref([
                 { weekday: 'Tue', dateNum: '10', location: 'London', itinerary: [
-                    { id: 1, type: '航班', name: 'CX239 HKG > LHR', dep: 'HKG', arr: 'LHR', time: '10:40-17:20', note: '抵達後搭 Piccadilly Line 直達飯店', transitText: '飛機約 13.5 小時' },
-                    { id: 2, type: '住宿', name: 'Merit Kensington Hotel', time: '19:30', note: '入住', transitText: '地鐵約 50 分鐘' }
+                    { id: 1, type: '航班', name: 'CX239 HKG > LHR', dep: 'HKG', arr: 'LHR', time: '10:40-17:20', note: '抵達後直達飯店', transitText: '飛機約 13.5 小時' }
                 ]},
-                { weekday: 'Wed', dateNum: '11', location: 'London / Oxford', itinerary: [
-                    { id: 3, type: '景點', name: '牛津大學城', time: '09:00', note: '搭乘火車前往 Oxford', transitText: '火車約 1 小時' }
-                ]},
+                { weekday: 'Wed', dateNum: '11', location: 'London', itinerary: [] },
                 { weekday: 'Thu', dateNum: '12', location: 'London', itinerary: [] },
                 { weekday: 'Fri', dateNum: '13', location: 'London', itinerary: [] },
-                { weekday: 'Sat', dateNum: '14', location: 'London > Paris', itinerary: [
-                    { id: 4, type: '其他', name: '歐洲之星 Eurostar', time: '10:00', note: '前往巴黎', transitText: '高鐵約 2.5 小時' }
-                ]},
+                { weekday: 'Sat', dateNum: '14', location: 'Paris', itinerary: [] },
                 { weekday: 'Sun', dateNum: '15', location: 'Paris', itinerary: [] },
                 { weekday: 'Mon', dateNum: '16', location: 'Paris', itinerary: [] },
-                { weekday: 'Tue', dateNum: '17', location: 'Paris > Amsterdam', itinerary: [] },
+                { weekday: 'Tue', dateNum: '17', location: 'Amsterdam', itinerary: [] },
                 { weekday: 'Wed', dateNum: '18', location: 'Amsterdam', itinerary: [] },
                 { weekday: 'Thu', dateNum: '19', location: 'Amsterdam', itinerary: [] },
-                { weekday: 'Fri', dateNum: '20', location: 'AMS > HKG', itinerary: [
-                    { id: 5, type: '航班', name: 'CX270 AMS > HKG', dep: 'AMS', arr: 'HKG', time: '13:10-06:20', note: '返程航班', transitText: '飛機約 11 小時' }
-                ]}
+                { weekday: 'Fri', dateNum: '20', location: 'Home', itinerary: [] }
             ]);
 
             const hotels = [
-                { name: 'Merit Kensington Hotel', address: '25 Courtfield Gardens, London SW5 0PG', tel: '+44 20 7373 5515' },
-                { name: 'Inntel Hotels Amsterdam Centre', address: 'Nieuwezijds Kolk 19, 1012 PV Amsterdam', tel: '+31 20 530 1818' }
+                { name: 'Merit Kensington Hotel', address: '25 Courtfield Gardens, London SW5 0PG', tel: '+44 20 7373 5515' }
             ];
 
             const form = ref({ type: '景點', name: '', time: '', ticket: '', note: '' });
@@ -274,24 +256,36 @@
 
             const saveItem = () => {
                 if (!form.value.name) return alert('請輸入行程名稱');
+                
                 if (isEditing.value) {
                     daysData.value[selectedDayIndex.value].itinerary[editIndex.value] = { ...form.value };
                 } else {
-                    daysData.value[selectedDayIndex.value].itinerary.push({ id: Date.now(), ...form.value });
+                    daysData.value[selectedDayIndex.value].itinerary.push({ 
+                        id: Date.now(), 
+                        ...form.value 
+                    });
                 }
+                
                 showModal.value = false;
+                // 儲存後立即重新渲染圖示
+                nextTick(() => lucide.createIcons());
             };
 
             const deleteItem = () => {
                 if (confirm('確定刪除？')) {
                     daysData.value[selectedDayIndex.value].itinerary.splice(editIndex.value, 1);
                     showModal.value = false;
+                    nextTick(() => lucide.createIcons());
                 }
             };
 
             const openNavigation = (loc) => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`, '_blank');
 
-            watch([currentTab, selectedDayIndex, showModal], () => nextTick(() => lucide.createIcons()));
+            // 監聽所有切換行為，確保圖示更新
+            watch([currentTab, selectedDayIndex, showModal], () => {
+                nextTick(() => lucide.createIcons());
+            });
+
             nextTick(() => lucide.createIcons());
 
             return { tabs, currentTab, daysData, selectedDayIndex, showModal, isEditing, form, gbpInput, eurInput, hotels, openAddModal, editItem, saveItem, deleteItem, openNavigation };
